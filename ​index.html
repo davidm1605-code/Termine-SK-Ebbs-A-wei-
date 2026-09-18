@@ -3,183 +3,905 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Ebbs A (Weiß) - Meisterschaftstermine</title>
+    <title>UEFA Champions League 2026/27 - Live</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 12px; box-sizing: border-box; }
-        .container { max-width: 600px; margin: 0 auto; background: #1e293b; padding: 16px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        h1 { font-size: 1.1rem; color: #38bdf8; text-align: center; margin-top: 0; margin-bottom: 16px; border-bottom: 2px solid #334155; padding-bottom: 10px; }
-        
-        .match-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .match-card.played { opacity: 0.7; border-color: #1e293b; }
-        
-        .match-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #94a3b8; font-weight: bold; }
-        .status-badge { background: #dc2626; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --accent-color: #00d2ff;
+            --live-red: #ff3333;
+            --green: #238636;
+        }
 
-        .match-body { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: bold; gap: 8px; }
-        
-        .team { flex: 1; display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .team.away { justify-content: flex-end; text-align: right; }
-        
-        .score-box { display: flex; align-items: center; gap: 4px; background: #1e293b; padding: 4px 8px; border-radius: 6px; border: 1px solid #475569; }
-        .score-box input { width: 24px; height: 24px; text-align: center; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; font-size: 0.8rem; }
-        
-        .footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; border-top: 1px solid #1e293b; padding-top: 8px; }
-        .match-date { font-size: 0.75rem; color: #38bdf8; }
-        
-        .cal-btn { background: #38bdf8; color: #0f172a; text-decoration: none; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; }
-        .cal-btn:hover { background: #0ea5e9; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-        .team-shield { width: 20px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.45rem; font-weight: bold; color: white; flex-shrink: 0; border-radius: 3px 3px 8px 8px; background-color: #15803d; border: 1px solid rgba(255,255,255,0.2); }
-        
-        .top-actions { display: flex; gap: 8px; margin-bottom: 16px; }
-        .action-btn { background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; font-size: 0.75rem; text-align: center; }
-        .action-btn:hover { background: #38bdf8; color: #0f172a; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .main-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .main-tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .main-tab.active {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        .status-bar {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .sub-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .sub-tab {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .sub-tab.active {
+            border-color: var(--accent-color);
+            color: var(--text-primary);
+        }
+
+        /* Neu: Container für Dropdown und Reset-Button nebeneinander */
+        .filter-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .team-select {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            font-size: 13px;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .reset-filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .reset-filter-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--text-primary);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .matchday-container {
+            margin-bottom: 20px;
+        }
+
+        .matchday-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: none;
+        }
+
+        .match-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .match-card:last-child {
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 0;
+        }
+
+        .match-card.live {
+            border: 2px solid var(--live-red);
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: rgba(255, 51, 51, 0.4); }
+            50% { border-color: rgba(255, 51, 51, 1); }
+            100% { border-color: rgba(255, 51, 51, 0.4); }
+        }
+
+        .team-side {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .team-side.home {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        .team-side.away {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .team-name {
+            font-size: 16px;
+            font-weight: 600;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .team-logo {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            background-color: #ffffff;
+            border-radius: 50%;
+            padding: 2px;
+        }
+
+        .match-info {
+            padding: 0 12px;
+            text-align: center;
+            min-width: 85px;
+        }
+
+        .score {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .match-status {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .match-status.live-text {
+            color: var(--live-red);
+            font-weight: bold;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+            background: rgba(255,255,255,0.02);
+            text-transform: uppercase;
+        }
+
+        td.team-col {
+            text-align: left;
+            padding-left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .form-dots {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot.win { background-color: var(--green); }
+        .dot.loss { background-color: var(--live-red); }
+        .dot.draw { background-color: var(--text-secondary); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>SK Ebbs A (Weiß) - Meisterschaft</h1>
+
+    <header>
+        <h1>UEFA Champions League</h1>
         
-        <div class="top-actions">
-            <button class="action-btn" onclick="triggerSave()" style="border-color: #22c55e; color: #22c55e;">💾 Ergebnisse Speichern</button>
+        <div class="main-tabs">
+            <button class="main-tab active" onclick="switchMainTab('matches')">⚽ Spiele</button>
+            <button class="main-tab" onclick="switchMainTab('table')">📊 Tabelle</button>
+        </div>
+        
+        <div class="status-bar" id="status-bar">Live-API verbunden • Letztes Update: <span id="clock">--:--:--</span></div>
+    </header>
+
+    <!-- SPIELE SEKTION -->
+    <div id="section-matches" class="section active">
+        <div class="controls-container">
+            <div class="sub-tabs">
+                <button class="sub-tab active" onclick="filterMatches('all', event)">Alle Spiele</button>
+                <button class="sub-tab" onclick="filterMatches('finished', event)">Beendet</button>
+                <button class="sub-tab" onclick="filterMatches('upcoming', event)">Kommende / Live</button>
+            </div>
+            <!-- Geändert: Dropdown und "Alle"-Button in einer Zeile -->
+            <div class="filter-row">
+                <select id="team-filter" class="team-select" onchange="filterByTeam(this.value)">
+                    <option value="all">🔍 Alle Mannschaften anzeigen</option>
+                </select>
+                <button class="reset-filter-btn" onclick="resetTeamFilter()">Alle</button>
+            </div>
         </div>
 
-        <div id="matches-container"></div>
+        <div id="matchdays-wrapper">
+            <!-- Wird dynamisch gefüllt -->
+        </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <!-- TABELLE SEKTION -->
+    <div id="section-table" class="section">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">#</th>
+                        <th style="text-align: left; padding-left: 12px;">Team</th>
+                        <th>Sp</th>
+                        <th>S</th>
+                        <th>U</th>
+                        <th>N</th>
+                        <th>Tore</th>
+                        <th>Diff</th>
+                        <th>Pkt</th>
+                        <th>Letzte Form</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Wird dynamisch berechnet -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDlkQPYaygg7CDYpNYfvFJUq83ylMGfAoo",
-            authDomain: "sk-ebbs-u12.firebaseapp.com",
-            projectId: "sk-ebbs-u12",
-            storageBucket: "sk-ebbs-u12.firebasestorage.app",
-            messagingSenderId: "1066194709918",
-            appId: "1:1066194709918:web:e20e84524f4fc12c6a3a8f",
-            measurementId: "G-Q7PZ4HCBZ6"
+    <script>
+        const teamLogos = {
+            "AEK": "https://images.fotmob.com/image_resources/logo/teamlogo/9773.png",
+            "Arsenal": "https://images.fotmob.com/image_resources/logo/teamlogo/9825.png",
+            "Aston Villa": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+            "At. Madrid": "https://images.fotmob.com/image_resources/logo/teamlogo/9906.png",
+            "Atlético Madrid": "https://images.fotmob.com/image_resources/logo/teamlogo/9906.png",
+            "Barcelona": "https://images.fotmob.com/image_resources/logo/teamlogo/8634.png",
+            "Bayern": "https://images.fotmob.com/image_resources/logo/teamlogo/9823.png",
+            "Benfica": "https://images.fotmob.com/image_resources/logo/teamlogo/9772.png",
+            "Betis": "https://images.fotmob.com/image_resources/logo/teamlogo/8302.png",
+            "Bodo/Glimt": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23000' stroke='%23ffeb3b' stroke-width='4'/><path d='M20 50 A 35 35 0 0 1 80 50' fill='none' stroke='%23ffeb3b' stroke-width='3'/><path d='M30 30 Q 50 20 70 30 M25 50 Q 50 40 75 50 M30 70 Q 50 60 70 70' fill='none' stroke='%23ffeb3b' stroke-width='2'/><text x='50' y='82' fill='%23ffeb3b' font-size='12' font-weight='bold' text-anchor='middle'>BODØ 1916</text></svg>",
+            "Bodø/Glimt": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23000' stroke='%23ffeb3b' stroke-width='4'/><path d='M20 50 A 35 35 0 0 1 80 50' fill='none' stroke='%23ffeb3b' stroke-width='3'/><path d='M30 30 Q 50 20 70 30 M25 50 Q 50 40 75 50 M30 70 Q 50 60 70 70' fill='none' stroke='%23ffeb3b' stroke-width='2'/><text x='50' y='82' fill='%23ffeb3b' font-size='12' font-weight='bold' text-anchor='middle'>BODØ 1916</text></svg>",
+            "Como": "https://images.fotmob.com/image_resources/logo/teamlogo/8534.png",
+            "Donezk": "https://images.fotmob.com/image_resources/logo/teamlogo/8639.png",
+            "Dortmund": "https://images.fotmob.com/image_resources/logo/teamlogo/9789.png",
+            "FC Brügge": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='55' r='40' fill='%23000' stroke='%23000' stroke-width='4'/><path d='M25 25 L75 75 M35 15 L85 65 M15 35 L65 85' stroke='%2300d2ff' stroke-width='10'/><path d='M35 10 Q 50 0 65 10 L60 25 L40 25 Z' fill='%23fff'/><text x='50' y='92' fill='%23000' font-size='9' font-weight='bold' text-anchor='middle'>CLUB BRUGGE KV</text></svg>",
+            "FC Porto": "https://images.fotmob.com/image_resources/logo/teamlogo/9781.png",
+            "Fenerbahce": "https://images.fotmob.com/image_resources/logo/teamlogo/8661.png",
+            "Fenerbahçe": "https://images.fotmob.com/image_resources/logo/teamlogo/8661.png",
+            "Feyenoord": "https://images.fotmob.com/image_resources/logo/teamlogo/10235.png",
+            "Galatasaray": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23fff'/><path d='M50 15 A 32 32 0 0 1 72 75 L 72 55 A 15 15 0 0 0 50 40 Z' fill='%23a1163b'/><path d='M50 85 A 32 32 0 0 1 28 25 L 28 45 A 15 15 0 0 0 50 60 Z' fill='%23feb300'/><text x='50' y='54' fill='%23000' font-size='10' font-weight='bold' text-anchor='middle'>1905</text></svg>",
+            "Inter": "https://images.fotmob.com/image_resources/logo/teamlogo/8636.png",
+            "LASK": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 15 L85 15 L85 70 Q 50 95 15 70 Z' fill='%23fff'/><text x='50' y='38' fill='%23000' font-size='18' font-weight='bold' text-anchor='middle'>LASK</text><rect x='25' y='48' width='10' height='25' fill='%23000'/><rect x='40' y='48' width='10' height='25' fill='%23000'/><rect x='55' y='48' width='10' height='25' fill='%23000'/><rect x='70' y='48' width='10' height='25' fill='%23000'/></svg>",
+            "Lens": "https://images.fotmob.com/image_resources/logo/teamlogo/8588.png",
+            "Liverpool": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+            "LOSC": "https://images.fotmob.com/image_resources/logo/teamlogo/8689.png",
+            "Man City": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+            "Man United": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+            "ManUnited": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+            "Neapel": "https://images.fotmob.com/image_resources/logo/teamlogo/9875.png",
+            "PSG": "https://images.fotmob.com/image_resources/logo/teamlogo/9847.png",
+            "PSV Eindhoven": "https://images.fotmob.com/image_resources/logo/teamlogo/8640.png",
+            "RB Leipzig": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 10 L85 10 L85 85 Q 50 98 15 85 Z' fill='%23fff' stroke='%231a2035' stroke-width='4'/><text x='50' y='30' fill='%23e63946' font-size='16' font-weight='bold' text-anchor='middle'>R B</text><circle cx='50' cy='52' r='18' fill='%23ffeb3b'/><path d='M35 50 Q 50 35 65 50 Q 50 65 35 50' fill='%23e63946'/><text x='50' y='80' fill='%231a2035' font-size='11' font-weight='bold' text-anchor='middle'>LEIPZIG</text></svg>",
+            "Real Madrid": "https://images.fotmob.com/image_resources/logo/teamlogo/8633.png",
+            "Roma": "https://images.fotmob.com/image_resources/logo/teamlogo/8686.png",
+            "Sabah FK": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 15 L85 15 L85 60 Q 50 98 15 60 Z' fill='%23000' stroke='%23ff4081' stroke-width='4'/><text x='50' y='45' fill='%23ff4081' font-size='18' font-weight='bold' text-anchor='middle'>SABAH</text><text x='50' y='75' fill='%23ff4081' font-size='10' font-weight='bold' text-anchor='middle'>2017</text></svg>",
+            "Slavia Prag": "https://images.fotmob.com/image_resources/logo/teamlogo/8658.png",
+            "Slovan Bratislava": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,5 90,25 90,75 50,95 10,75 10,25' fill='%2333b5e5'/><circle cx='50' cy='52' r='32' fill='%23ff3333'/><path d='M46 32 h8 v15 h15 v8 h-15 v15 h-8 v-15 h-15 v-8 h15 z' fill='%23fff'/><text x='50' y='22' fill='%23003366' font-size='9' font-weight='bold' text-anchor='middle'>SLOVAN</text></svg>",
+            "Sporting": "https://images.fotmob.com/image_resources/logo/teamlogo/9845.png",
+            "VfB Stuttgart": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 10 L85 10 L85 60 Q 50 95 15 60 Z' fill='%23fff' stroke='%23e63946' stroke-width='4'/><text x='50' y='35' fill='%23e63946' font-size='20' font-weight='bold' text-anchor='middle'>VfB</text><path d='M25 60 L75 60 L50 88 Z' fill='%23ffeb3b'/></svg>",
+            "Viking": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='5,20 95,20 80,85 5,85' fill='%23cc2b32' stroke='%23ffeb3b' stroke-width='3'/><text x='50' y='40' fill='%23ffeb3b' font-size='10' font-weight='bold' text-anchor='middle'>VIKING F.K.</text><text x='50' y='72' fill='%23ffeb3b' font-size='12' font-weight='bold' text-anchor='middle'>STAVANGER</text></svg>",
+            "Villarreal": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png"
         };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Rohdaten der Meisterschaftsspiele SK Ebbs A (Weiß) mit echtem Datum für automatischen "Beendet"-Status
-        let matches = [
-            { id: 1, round: "1. Runde", home: "SK Ebbs B", away: "SK Ebbs A", dateStr: "04.09.2026", timeStr: "18:30", rawDate: "2026-09-04T18:30:00", isoDate: "20260904T183000Z", homeGoals: "", awayGoals: "" },
-            { id: 2, round: "2. Runde", home: "Walchsee", away: "SK Ebbs A", dateStr: "12.09.2026", timeStr: "14:00", rawDate: "2026-09-12T14:00:00", isoDate: "20260912T140000Z", homeGoals: "", awayGoals: "" },
-            { id: 3, round: "3. Runde", home: "SK Ebbs A", away: "Wörgl", dateStr: "19.09.2026", timeStr: "12:00", rawDate: "2026-09-19T12:00:00", isoDate: "20260919T120000Z", homeGoals: "", awayGoals: "" },
-            { id: 4, round: "4. Runde", home: "Erl", away: "SK Ebbs A", dateStr: "25.09.2026", timeStr: "17:00", rawDate: "2026-09-25T17:00:00", isoDate: "20260925T170000Z", homeGoals: "", awayGoals: "" },
-            { id: 5, round: "5. Runde", home: "SK Ebbs A", away: "Waidring", dateStr: "03.10.2026", timeStr: "11:30", rawDate: "2026-10-03T11:30:00", isoDate: "20261003T113000Z", homeGoals: "", awayGoals: "" },
-            { id: 6, round: "6. Runde", home: "Schwoich", away: "SK Ebbs A", dateStr: "11.10.2026", timeStr: "14:30", rawDate: "2026-10-11T14:30:00", isoDate: "20261011T143000Z", homeGoals: "", awayGoals: "" },
-            { id: 7, round: "7. Runde", home: "SK Ebbs A", away: "Niederndorf", dateStr: "17.10.2026", timeStr: "12:30", rawDate: "2026-10-17T12:30:00", isoDate: "20261017T123000Z", homeGoals: "", awayGoals: "" },
-            { id: 8, round: "8. Runde", home: "SK Ebbs B", away: "St. Johann B", dateStr: "24.10.2026", timeStr: "12:00", rawDate: "2026-10-24T12:00:00", isoDate: "20261024T120000Z", homeGoals: "", awayGoals: "" },
-            { id: 9, round: "9. Runde", home: "SK Ebbs A", away: "Bruckhäusl", dateStr: "29.10.2026", timeStr: "17:00", rawDate: "2026-10-29T17:00:00", isoDate: "20261029T170000Z", homeGoals: "", awayGoals: "" }
-        ];
 
         function getTeamLogo(name) {
-            return `<div class="team-shield">${name.substring(0,3).toUpperCase()}</div>`;
+            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'></path><path d='M2 12h20'></path></svg>";
         }
 
-        function createGoogleCalendarLink(m) {
-            const title = encodeURIComponent(`Meisterschaft: ${m.home} vs. ${m.away}`);
-            const details = encodeURIComponent(`SK Ebbs A (Weiß) Meisterschaftsspiel - ${m.round}`);
-            const start = m.isoDate;
-            return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${start}&details=${details}`;
-        }
-
-        function renderMatches() {
-            const container = document.getElementById("matches-container");
-            container.innerHTML = "";
-
-            const now = new Date();
-
-            // Sortierung: Anstehende Spiele oben, bereits vergangene (oder mit eingetragenem Ergebnis) unten
-            const sorted = [...matches].sort((a, b) => {
-                const aTime = new Date(a.rawDate).getTime();
-                const bTime = new Date(b.rawDate).getTime();
-                const aPlayed = (aTime < now) || (a.homeGoals !== "" && a.awayGoals !== "");
-                const bPlayed = (bTime < now) || (b.homeGoals !== "" && b.awayGoals !== "");
-                
-                if (aPlayed === bPlayed) return aTime - bTime;
-                return aPlayed ? 1 : -1; 
-            });
-
-            sorted.forEach((m) => {
-                const matchTime = new Date(m.rawDate).getTime();
-                const isPlayed = (matchTime < now) || (m.homeGoals !== "" && m.awayGoals !== "");
-                
-                const card = document.createElement("div");
-                card.className = `match-card ${isPlayed ? 'played' : ''}`;
-                
-                card.innerHTML = `
-                    <div class="match-header">
-                        <span>${m.round}</span>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            ${isPlayed ? '<span class="status-badge">Beendet</span>' : ''}
-                            <span>${m.dateStr} - ${m.timeStr} Uhr</span>
-                        </div>
-                    </div>
-                    <div class="match-body">
-                        <div class="team">${getTeamLogo(m.home)} <span>${m.home}</span></div>
-                        <div class="score-box">
-                            <input type="text" data-id="${m.id}" data-type="h" value="${m.homeGoals}" oninput="updateScore(${m.id}, 'h', this.value)">
-                            <span>:</span>
-                            <input type="text" data-id="${m.id}" data-type="a" value="${m.awayGoals}" oninput="updateScore(${m.id}, 'a', this.value)">
-                        </div>
-                        <div class="team away"><span>${m.away}</span> ${getTeamLogo(m.away)}</div>
-                    </div>
-                    <div class="footer-row">
-                        <span class="match-date">📍 Meisterschaftsspiel</span>
-                        <a href="${createGoogleCalendarLink(m)}" target="_blank" class="cal-btn">📅 In Kalender</a>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        window.updateScore = function(id, type, val) {
-            const match = matches.find(m => m.id === id);
-            if (match) {
-                if (type === 'h') match.homeGoals = val.trim();
-                if (type === 'a') match.awayGoals = val.trim();
+        let matchdays = [
+            {
+                day: "Spieltag 1 von 8",
+                matches: [
+                    { home: "FC Brügge", away: "Aston Villa", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "AEK", away: "LASK", homeScore: 1, awayScore: 0, status: "Endstand", live: false },
+                    { home: "FC Porto", away: "Man City", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
+                    { home: "Real Madrid", away: "Inter", homeScore: 2, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Dortmund", away: "Villarreal", homeScore: 3, awayScore: 2, status: "Endstand", live: false },
+                    { home: "LOSC", away: "Benfica", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "Barcelona", away: "Feyenoord", homeScore: 5, awayScore: 1, status: "Endstand", live: false },
+                    { home: "VfB Stuttgart", away: "Viking", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Neapel", away: "Arsenal", homeScore: 0, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Liverpool", away: "At. Madrid", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "PSG", away: "Slovan Bratislava", homeScore: 6, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Sporting", away: "Galatasaray", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Fenerbahce", away: "Roma", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
+                    { home: "PSV Eindhoven", away: "Donezk", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Bayern", away: "Bodø/Glimt", homeScore: 5, awayScore: 0, status: "Endstand", live: false },
+                    { home: "Slavia Prag", away: "Lens", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "Como", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Man United", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 2 von 8",
+                matches: [
+                    { home: "Lens", away: "Sporting", homeScore: null, awayScore: null, time: "18:45", date: "13.10.", live: false },
+                    { home: "Sabah FK", away: "Slavia Prag", homeScore: null, awayScore: null, time: "18:45", date: "13.10.", live: false },
+                    { home: "Galatasaray", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Arsenal", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "At. Madrid", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Villarreal", away: "Neapel", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Viking", away: "Bayern", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Inter", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Feyenoord", away: "Como", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false },
+                    { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Roma", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Slovan Bratislava", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false },
+                    { home: "Aston Villa", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Man City", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Bodø/Glimt", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "LASK", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 3 von 8",
+                matches: [
+                    { home: "Sabah FK", away: "Dortmund", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
+                    { home: "Fenerbahce", away: "Slavia Prag", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
+                    { home: "PSG", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "Man City", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "Neapel", away: "Bodø/Glimt", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "FC Porto", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "Roma", away: "Slovan Bratislava", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "Liverpool", away: "Villarreal", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "VfB Stuttgart", away: "At. Madrid", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "Como", away: "Man United", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
+                    { home: "LOSC", away: "Galatasaray", homeScore: null, awayScore: null, time: "18:45", date: "21.10.", live: false },
+                    { home: "Sporting", away: "LASK", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
+                    { home: "Benfica", away: "Feyenoord", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
+                    { home: "Inter", away: "Donezk", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
+                    { home: "Bayern", away: "Arsenal", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
+                    { home: "Aston Villa", away: "Viking", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
+                    { home: "FC Brügge", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
+                    { home: "Real Madrid", away: "RB Leipzig", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 4 von 8",
+                matches: [
+                    { home: "Galatasaray", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
+                    { home: "Donezk", away: "Sporting", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
+                    { home: "Feyenoord", away: "Inter", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
+                    { home: "Bodø/Glimt", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
+                    { home: "At. Madrid", away: "Bayern", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
+                    { home: "Villarreal", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
+                    { home: "Barcelona", away: "Aston Villa", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
+                    { home: "Man United", away: "Roma", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
+                    { home: "LASK", away: "Slovan Bratislava", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
+                    { home: "Fenerbahce", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
+                    { home: "AEK", away: "Real Madrid", homeScore: null, awayScore: null, time: "18:45", date: "04.11.", live: false },
+                    { home: "Lens", away: "Como", homeScore: null, awayScore: null, time: "18:45", date: "04.11.", live: false },
+                    { home: "Dortmund", away: "Benfica", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
+                    { home: "RB Leipzig", away: "Man City", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
+                    { home: "FC Porto", away: "Neapel", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
+                    { home: "PSV Eindhoven", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
+                    { home: "Slavia Prag", away: "Arsenal", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
+                    { home: "Viking", away: "Sabah FK", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 5 von 8",
+                matches: [
+                    { home: "Galatasaray", away: "Aston Villa", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false },
+                    { home: "Bodø/Glimt", away: "LASK", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false },
+                    { home: "Feyenoord", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
+                    { home: "Arsenal", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
+                    { home: "Slovan Bratislava", away: "Benfica", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
+                    { home: "Real Madrid", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
+                    { home: "RB Leipzig", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
+                    { home: "Como", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
+                    { home: "Man City", away: "Neapel", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
+                    { home: "Slavia Prag", away: "Villarreal", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false },
+                    { home: "Sabah FK", away: "Barcelona", homeScore: null, awayScore: null, time: "18:45", date: "25.11.", live: false },
+                    { home: "PSG", away: "Roma", homeScore: null, awayScore: null, time: "18:45", date: "25.11.", live: false },
+                    { home: "Donezk", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
+                    { home: "Inter", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
+                    { home: "Sporting", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
+                    { home: "At. Madrid", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
+                    { home: "Bayern", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "26.11.", live: false },
+                    { home: "FC Brügge", away: "Liverpool", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 6 von 8",
+                matches: [
+                    { home: "Villarreal", away: "Sabah FK", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false },
+                    { home: "Viking", away: "Feyenoord", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false },
+                    { home: "Bayern", away: "Slavia Prag", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
+                    { home: "Aston Villa", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
+                    { home: "Roma", away: "Sporting", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
+                    { home: "Man United", away: "RB Leipzig", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
+                    { home: "Barcelona", away: "Man City", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
+                    { home: "AEK", away: "Galatasaray", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
+                    { home: "Neapel", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
+                    { home: "Benfica", away: "Como", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false },
+                    { home: "Slovan Bratislava", away: "Donezk", homeScore: null, awayScore: null, time: "18:45", date: "09.12.", live: false },
+                    { home: "Arsenal", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
+                    { home: "LASK", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
+                    { home: "LOSC", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
+                    { home: "PSV Eindhoven", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
+                    { home: "At. Madrid", away: "Bodø/Glimt", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
+                    { home: "Liverpool", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
+                    { home: "Dortmund", away: "Inter", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 7 von 8",
+                matches: [
+                    { home: "Galatasaray", away: "Feyenoord", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false },
+                    { home: "Bodø/Glimt", away: "At. Madrid", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false },
+                    { home: "Aston Villa", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
+                    { home: "FC Porto", away: "Slavia Prag", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
+                    { home: "Inter", away: "Liverpool", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
+                    { home: "VfB Stuttgart", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
+                    { home: "Real Madrid", away: "LASK", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
+                    { home: "LOSC", away: "Slovan Bratislava", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
+                    { home: "AEK", away: "Roma", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
+                    { home: "Sabah FK", away: "Neapel", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false },
+                    { home: "Fenerbahce", away: "Villarreal", homeScore: null, awayScore: null, time: "18:45", date: "20.01.", live: false },
+                    { home: "Viking", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
+                    { home: "RB Leipzig", away: "Donezk", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
+                    { home: "Benfica", away: "Arsenal", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
+                    { home: "Como", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
+                    { home: "Man United", away: "Bayern", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
+                    { home: "Lens", away: "Man City", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
+                    { home: "Sporting", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 8 von 8",
+                matches: [
+                    { home: "Neapel", away: "Viking", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Barcelona", away: "Como", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "PSG", away: "Galatasaray", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Feyenoord", away: "RB Leipzig", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Dortmund", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "LASK", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Donezk", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "At. Madrid", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "FC Brügge", away: "Bodø/Glimt", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Arsenal", away: "Sabah FK", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Villarreal", away: "Slavia Prag", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Aston Villa", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Bayern", away: "Benfica", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Roma", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Slovan Bratislava", away: "Inter", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "VfB Stuttgart", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Liverpool", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Man City", away: "Sporting", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false }
+                ]
             }
-        };
+        ];
 
-        async function loadData() {
+        let currentFilter = 'all';
+        let selectedTeam = 'all';
+
+        // Befüllt das Dropdown-Menü automatisch mit allen gefundenen Mannschaften alphabetisch sortiert
+        function initTeamDropdown() {
+            const teamsSet = new Set();
+            matchdays.forEach(md => {
+                md.matches.forEach(m => {
+                    teamsSet.add(m.home);
+                    teamsSet.add(m.away);
+                });
+            });
+
+            const sortedTeams = Array.from(teamsSet).sort();
+            const selectEl = document.getElementById('team-filter');
+            
+            sortedTeams.forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                selectEl.appendChild(option);
+            });
+        }
+
+        async function fetchLiveScores() {
             try {
-                const docSnap = await getDoc(doc(db, "matchdata", "sk_ebbs_a_weiss"));
-                if (docSnap.exists()) {
-                    const saved = docSnap.data().matches;
-                    if (saved) {
-                        matches.forEach(m => {
-                            const found = saved.find(s => s.id === m.id);
-                            if (found) {
-                                m.homeGoals = found.homeGoals ?? "";
-                                m.awayGoals = found.awayGoals ?? "";
-                            }
+                const response = await fetch('/.netlify/functions/proxy');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.events) {
+                        data.events.forEach(event => {
+                            const competition = event.competitions[0];
+                            const homeComp = competition.competitors.find(c => c.homeAway === 'home');
+                            const awayComp = competition.competitors.find(c => c.homeAway === 'away');
+                            
+                            if (!homeComp || !awayComp) return;
+
+                            const homeTeamName = homeComp.team.shortDisplayName || homeComp.team.name;
+                            const awayTeamName = awayComp.team.shortDisplayName || awayComp.team.name;
+                            const homeScore = parseInt(homeComp.score);
+                            const awayScore = parseInt(awayComp.score);
+                            const statusType = competition.status.type.state; 
+                            const detailMinutes = competition.status.displayClock;
+
+                            matchdays.forEach(md => {
+                                md.matches.forEach(m => {
+                                    const matchHomeLower = m.home.toLowerCase();
+                                    const matchAwayLower = m.away.toLowerCase();
+                                    const apiHomeLower = homeTeamName.toLowerCase();
+                                    const apiAwayLower = awayTeamName.toLowerCase();
+
+                                    if ((matchHomeLower.includes(apiHomeLower) || apiHomeLower.includes(matchHomeLower)) && 
+                                        (matchAwayLower.includes(apiAwayLower) || apiAwayLower.includes(matchAwayLower))) {
+                                        
+                                        if (!isNaN(homeScore)) m.homeScore = homeScore;
+                                        if (!isNaN(awayScore)) m.awayScore = awayScore;
+
+                                        if (statusType === 'in') {
+                                            m.live = true;
+                                            m.liveTime = detailMinutes ? detailMinutes + "'" : '';
+                                            m.status = "LIVE";
+                                        } else if (statusType === 'post') {
+                                            m.live = false;
+                                            m.status = "Endstand";
+                                        }
+                                    }
+                                });
+                            });
                         });
                     }
                 }
-            } catch (e) {
-                console.error("Ladefehler:", e);
+                document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error("Fehler beim Abrufen der Live-Daten:", error);
+                document.getElementById('clock').innerText = new Date().toLocaleTimeString();
             }
-            renderMatches();
         }
 
-        window.triggerSave = async function() {
-            try {
-                await setDoc(doc(db, "matchdata", "sk_ebbs_a_weiss"), { matches });
-                alert("Ergebnisse erfolgreich gespeichert!");
-                renderMatches();
-            } catch (e) {
-                console.error("Speicherfehler:", e);
-                alert("Fehler beim Speichern.");
-            }
-        };
+        function calculateStandings() {
+            const tableMap = {};
 
-        loadData();
+            matchdays.forEach(md => {
+                md.matches.forEach(m => {
+                    [m.home, m.away].forEach(team => {
+                        if (!tableMap[team]) {
+                            tableMap[team] = { team: team, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, pts: 0, form: [] };
+                        }
+                    });
+
+                    if (m.homeScore !== null && m.awayScore !== null && !m.live) {
+                        const hTeam = tableMap[m.home];
+                        const aTeam = tableMap[m.away];
+
+                        hTeam.played++;
+                        aTeam.played++;
+
+                        hTeam.gf += m.homeScore;
+                        hTeam.ga += m.awayScore;
+                        aTeam.gf += m.awayScore;
+                        aTeam.ga += m.homeScore;
+
+                        if (m.homeScore > m.awayScore) {
+                            hTeam.won++;
+                            hTeam.pts += 3;
+                            hTeam.form.push('win');
+                            aTeam.lost++;
+                            aTeam.form.push('loss');
+                        } else if (m.homeScore < m.awayScore) {
+                            aTeam.won++;
+                            aTeam.pts += 3;
+                            aTeam.form.push('win');
+                            hTeam.lost++;
+                            hTeam.form.push('loss');
+                        } else {
+                            hTeam.drawn++;
+                            hTeam.pts += 1;
+                            hTeam.form.push('draw');
+                            aTeam.drawn++;
+                            aTeam.pts += 1;
+                            aTeam.form.push('draw');
+                        }
+                    }
+                });
+            });
+
+            let standingsArr = Object.values(tableMap);
+            standingsArr.sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                const diffA = a.gf - a.ga;
+                const diffB = b.gf - b.ga;
+                if (diffB !== diffA) return diffB - diffA;
+                return b.gf - a.gf;
+            });
+
+            standingsArr.forEach((row, index) => {
+                row.rank = index + 1;
+            });
+
+            return standingsArr;
+        }
+
+        async function renderApp() {
+            await fetchLiveScores();
+
+            const wrapper = document.getElementById('matchdays-wrapper');
+            wrapper.innerHTML = '';
+
+            matchdays.forEach(md => {
+                let mdDiv = document.createElement('div');
+                mdDiv.className = 'matchday-container';
+                
+                let html = `<div class="matchday-title">${md.day}</div>`;
+                let visibleMatchCount = 0;
+                
+                md.matches.forEach(m => {
+                    const hasResult = (m.homeScore !== null && m.awayScore !== null);
+                    const isFinished = hasResult && !m.live && m.status === "Endstand";
+                    const isUpcoming = !hasResult || m.live;
+
+                    // Filter nach Status (Alle, Beendet, Kommende/Live)
+                    let matchesStatusFilter = (currentFilter === 'all') || 
+                                              (currentFilter === 'finished' && isFinished) || 
+                                              (currentFilter === 'upcoming' && isUpcoming);
+
+                    // Filter nach Mannschaft (falls eine ausgewählt wurde)
+                    let matchesTeamFilter = (selectedTeam === 'all') || 
+                                            (m.home === selectedTeam || m.away === selectedTeam);
+
+                    let showCard = matchesStatusFilter && matchesTeamFilter;
+
+                    if (showCard) visibleMatchCount++;
+
+                    const isLive = m.live;
+                    let statusText = '';
+                    if (isLive) {
+                        statusText = `<span class="match-status live-text">LIVE ${m.liveTime || ''}</span>`;
+                    } else if (hasResult) {
+                        statusText = `<span class="match-status">${m.status || 'Endstand'}</span>`;
+                    } else {
+                        const dateTimeString = (m.date ? m.date + ' ' : '') + (m.time ? m.time + ' Uhr' : '');
+                        statusText = `<span class="match-status">${dateTimeString}</span>`;
+                    }
+
+                    const scoreText = hasResult ? `${m.homeScore} - ${m.awayScore}` : 'vs';
+
+                    html += `
+                        <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};">
+                            <div class="team-side home">
+                                <span class="team-name">${m.home}</span>
+                                <img src="${getTeamLogo(m.home)}" class="team-logo" alt="${m.home}">
+                            </div>
+                            <div class="match-info">
+                                <div class="score">${scoreText}</div>
+                                ${statusText}
+                            </div>
+                            <div class="team-side away">
+                                <img src="${getTeamLogo(m.away)}" class="team-logo" alt="${m.away}">
+                                <span class="team-name">${m.away}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                mdDiv.innerHTML = html;
+                if (visibleMatchCount === 0) {
+                    mdDiv.style.display = 'none';
+                } else {
+                    mdDiv.style.display = 'block';
+                }
+                wrapper.appendChild(mdDiv);
+            });
+
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            
+            const currentStandings = calculateStandings();
+            currentStandings.forEach((row) => {
+                const diff = row.gf - row.ga;
+                const diffStr = diff > 0 ? `+${diff}` : diff;
+                
+                let dotsHtml = '';
+                const recentForm = row.form.slice(-5);
+                recentForm.forEach(f => {
+                    dotsHtml += `<span class="dot ${f}"></span>`;
+                });
+                if (dotsHtml === '') {
+                    dotsHtml = `<span class="dot draw"></span>`;
+                }
+                
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.rank}</td>
+                    <td class="team-col">
+                        <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:26px;height:26px;">
+                        ${row.team}
+                    </td>
+                    <td>${row.played}</td>
+                    <td>${row.won}</td>
+                    <td>${row.drawn}</td>
+                    <td>${row.lost}</td>
+                    <td>${row.gf}:${row.ga}</td>
+                    <td>${diffStr}</td>
+                    <td><strong>${row.pts}</strong></td>
+                    <td>
+                        <div class="form-dots">
+                            ${dotsHtml}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function switchMainTab(tab) {
+            document.querySelectorAll('.main-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+
+            if (tab === 'matches') {
+                document.querySelector('.main-tab:nth-child(1)').classList.add('active');
+                document.getElementById('section-matches').classList.add('active');
+            } else {
+                document.querySelector('.main-tab:nth-child(2)').classList.add('active');
+                document.getElementById('section-table').classList.add('active');
+            }
+        }
+
+        function filterMatches(filter, event) {
+            currentFilter = filter;
+            document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            renderApp();
+        }
+
+        function filterByTeam(team) {
+            selectedTeam = team;
+            renderApp();
+        }
+
+        // Neu: Funktion zum Zurücksetzen des Teamfilters über den "Alle"-Button
+        function resetTeamFilter() {
+            selectedTeam = 'all';
+            document.getElementById('team-filter').value = 'all';
+            renderApp();
+        }
+
+        // Beim Start einmaliges Ausfüllen des Dropdowns und erster Render-Durchlauf
+        initTeamDropdown();
+        renderApp();
+        setInterval(renderApp, 30000);
     </script>
 </body>
 </html>
- 
